@@ -4,6 +4,12 @@ FILES:
   TEST:
     PATH: "data/test.csv"
 
+categorical_columns:
+  - "type"
+  - "sector"
+
+target_column: "price"
+
 
 model_params:
   learning_rate: 0.01
@@ -11,8 +17,3 @@ model_params:
   max_depth: 5
   loss: "absolute_error"
 
-categorical_columns:
-  - "type"
-  - "sector"
-
-target_column: "price"
