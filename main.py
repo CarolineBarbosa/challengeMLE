@@ -11,7 +11,7 @@ from sklearn.metrics import (
     mean_absolute_error)
 
 
-def load_config(config_file="setup.yaml"):
+def load_config(config_file="config.yaml"):
     with open(config_file, 'r') as file:
         config = yaml.safe_load(file)
     return config
@@ -77,5 +77,5 @@ def main(config_path: str):
 
 
 if __name__ == "__main__":
-    main("setup.yaml")
+    main("config.yaml")
     
