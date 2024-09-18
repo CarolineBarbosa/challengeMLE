@@ -1,1 +1,4 @@
 # challengeMLE
+
+assumptions made 
+

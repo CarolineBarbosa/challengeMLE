@@ -10,9 +10,6 @@ from sklearn.metrics import (
     mean_absolute_error,
 )
 
-from main import load_config
-
-
 class ModelPipeline:
     def __init__(self, config_file: dict):
         self.config = config_file
@@ -73,23 +70,10 @@ class ModelPipeline:
 
     def evaluate_model(self):
         self.test_target = self.test_data[self.config["target_column"]].values
-        test_cols = list(self.train_cols)  # Copy the train_cols list
+        test_cols = list(self.train_cols) 
         test_cols.remove(self.config["target_column"])
+        
         self.test_prediction = self.pipeline.predict(self.test_data[test_cols])
 
         self._print_metrics()
 
-
-def main(config_file):
-    config = load_config(config_file)
-    # print(config)
-    model_pipeline = ModelPipeline(config)
-    model_pipeline.load_data()
-    model_pipeline.get_preprocessor()
-    model_pipeline.build_pipeline()
-    model_pipeline.train_model()
-    model_pipeline.evaluate_model()
-
-
-if __name__ == "__main__":
-    main("config.yaml")
