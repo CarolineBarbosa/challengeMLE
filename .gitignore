@@ -5,6 +5,7 @@
 
 data/*
 notebooks/*
+log/*
 # User-specific files
 *.rsuser
 *.suo
