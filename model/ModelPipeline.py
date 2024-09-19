@@ -20,6 +20,7 @@ class ModelPipeline:
         self.test_prediction = None
         self.test_target = None
         self.train_cols = None
+        self.test_cols = None
 
     def load_data(self):
         self.train_data = pd.read_csv(self.config["FILES"]["TRAIN"]["PATH"])
@@ -70,10 +71,21 @@ class ModelPipeline:
 
     def evaluate_model(self):
         self.test_target = self.test_data[self.config["target_column"]].values
-        test_cols = list(self.train_cols) 
-        test_cols.remove(self.config["target_column"])
+        self.test_cols = list(self.train_cols) 
+        self.test_cols.remove(self.config["target_column"])
         
-        self.test_prediction = self.pipeline.predict(self.test_data[test_cols])
+        self.test_prediction = self.pipeline.predict(self.test_data[self.test_cols])
+        print(self.test_data[self.test_cols])
 
         self._print_metrics()
+    
+    def predict(self, test_data: pd.DataFrame) -> np.ndarray:
+
+            # Ensure test data has the same columns as train data (excluding id and target)
+            test_cols = [col for col in self.train_cols if col in test_data.columns]
+
+            # Predict using the pipeline
+            predictions = self.pipeline.predict(test_data[test_cols])
+
+            return predictions
 
