@@ -34,12 +34,9 @@ WORKDIR /app
 # Leverage a cache mount to /root/.cache/pip to speed up subsequent builds.
 # Leverage a bind mount to requirements.txt to avoid having to copy them into
 # into this layer.
-COPY requirements.txt .
-
-RUN pip install -r requirements.txt
-# --mount=type=cache,target=/root/.cache/pip \
-    # --mount=type=bind,source=requirements.txt,target=requirements.txt \
-    
+RUN --mount=type=cache,target=/root/.cache/pip \
+    --mount=type=bind,source=requirements.txt,target=requirements.txt \
+    python -m pip install -r requirements.txt
 
 # Switch to the non-privileged user to run the application.
 # USER appuser
@@ -51,4 +48,4 @@ COPY . .
 EXPOSE 8000
 
 # Run the application.
-CMD python main.py
+CMD uvicorn 'app:app' --host=0.0.0.0 --port=8000
