@@ -1,12 +1,12 @@
 from fastapi import FastAPI, Depends
 from fastapi import Depends, HTTPException
 from fastapi.security.api_key import APIKeyHeader
-from typing import Annotated
 from pydantic import BaseModel
 import pandas as pd
 import logging
-from main import main, load_config
 from datetime import datetime
+from model.Model import train_model, load_config
+
 
 ### INITIATING LOG
 log_filename = datetime.now().strftime("log_%Y-%m-%d_%H-%M-%S.log")
@@ -21,10 +21,10 @@ logging.basicConfig(
 ### INITIATING APP
 app = FastAPI()
 
-model_pipeline = main("config.yaml")
+model_pipeline = train_model("config_files/modelConfig.yaml")
 
 ### API KEY AUTH
-SECRETS = load_config("secrets.yaml")  # Read API key from environment variable
+SECRETS = load_config("config_files/secrets.yaml")
 API_KEY = SECRETS["API_KEY"]
 API_KEY_NAME = "access-token"
 api_key_header = APIKeyHeader(name=API_KEY_NAME, auto_error=False)

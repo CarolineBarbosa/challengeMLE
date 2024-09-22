@@ -73,7 +73,6 @@ class ModelPipeline:
         logging.info(f"MAE : {mae}")
 
     def evaluate_model(self):
-        print(self.test_data)
         self.test_target = self.test_data[self.config["target_column"]].values
         self.test_cols = list(self.train_cols)
         self.test_cols.remove(self.config["target_column"])

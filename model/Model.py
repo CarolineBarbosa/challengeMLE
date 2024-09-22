@@ -1,15 +1,15 @@
 import yaml
 import logging
-from model.ModelPipeline import ModelPipeline
+from .ModelPipeline import ModelPipeline
 
 
-def load_config(config_file="config.yaml"):
+def load_config(config_file="config_files/modelConfig.yaml"):
     with open(config_file, "r") as file:
         config = yaml.safe_load(file)
     return config
 
 
-def main(config_path: str):
+def train_model(config_path: str):
     logging.info("Initiating Model Setup...")
     logging.info(f"Loading configuration from {config_path}")
     config = load_config(config_path)
@@ -33,4 +33,4 @@ def main(config_path: str):
 
 
 if __name__ == "__main__":
-    main("config.yaml")
+    train_model("config_files/modelConfig.yaml")
