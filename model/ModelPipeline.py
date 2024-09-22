@@ -10,6 +10,8 @@ from sklearn.metrics import (
     mean_absolute_error,
 )
 import logging
+from .DataLoad import DataLoad
+
 
 class ModelPipeline:
     def __init__(self, config_file: dict):
@@ -24,8 +26,10 @@ class ModelPipeline:
         self.test_cols = None
 
     def load_data(self):
-        self.train_data = pd.read_csv(self.config["FILES"]["TRAIN"]["PATH"])
-        self.test_data = pd.read_csv(self.config["FILES"]["TEST"]["PATH"])
+        train_loader = DataLoad(self.config["FILES"]["TRAIN"]["PATH"]) 
+        self.train_data = train_loader.load_file()
+        test_loader = DataLoad(self.config["FILES"]["TEST"]["PATH"]) 
+        self.test_data = test_loader.load_file()
 
     def get_preprocessor(self):
         categorical_cols = self.config["categorical_columns"]
@@ -72,6 +76,7 @@ class ModelPipeline:
         logging.info(f"MAE : {mae}")
 
     def evaluate_model(self):
+        print(self.test_data)
         self.test_target = self.test_data[self.config["target_column"]].values
         self.test_cols = list(self.train_cols) 
         self.test_cols.remove(self.config["target_column"])
