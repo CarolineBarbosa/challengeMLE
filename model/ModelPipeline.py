@@ -26,9 +26,9 @@ class ModelPipeline:
         self.test_cols = None
 
     def load_data(self):
-        train_loader = DataLoad(self.config["FILES"]["TRAIN"]["PATH"]) 
+        train_loader = DataLoad(self.config["FILES"]["TRAIN"]["PATH"])
         self.train_data = train_loader.load_file()
-        test_loader = DataLoad(self.config["FILES"]["TEST"]["PATH"]) 
+        test_loader = DataLoad(self.config["FILES"]["TEST"]["PATH"])
         self.test_data = test_loader.load_file()
 
     def get_preprocessor(self):
@@ -64,28 +64,23 @@ class ModelPipeline:
         self.pipeline.fit(self.train_data[self.train_cols], self.train_data[target])
 
     def _print_metrics(self):
-        rmse=np.sqrt(mean_squared_error(self.test_prediction, self.test_target)) 
+        rmse = np.sqrt(mean_squared_error(self.test_prediction, self.test_target))
         mape = mean_absolute_percentage_error(self.test_prediction, self.test_target)
-        mae =  mean_absolute_error(self.test_prediction, self.test_target)
+        mae = mean_absolute_error(self.test_prediction, self.test_target)
         logging.info("MODEL ERROR METRICS")
-        logging.info(
-            f"RMSE: {rmse}")
-        logging.info(
-            f"MAPE: {mape}"
-        )
+        logging.info(f"RMSE: {rmse}")
+        logging.info(f"MAPE: {mape}")
         logging.info(f"MAE : {mae}")
 
     def evaluate_model(self):
         print(self.test_data)
         self.test_target = self.test_data[self.config["target_column"]].values
-        self.test_cols = list(self.train_cols) 
+        self.test_cols = list(self.train_cols)
         self.test_cols.remove(self.config["target_column"])
         self.test_prediction = self.pipeline.predict(self.test_data[self.test_cols])
         self._print_metrics()
-    
-    def predict(self, test_data: pd.DataFrame) -> np.ndarray:
-            
-            test_cols = [col for col in self.train_cols if col in test_data.columns]
-            predictions = self.pipeline.predict(test_data[test_cols])
-            return predictions
 
+    def predict(self, test_data: pd.DataFrame) -> np.ndarray:
+        test_cols = [col for col in self.train_cols if col in test_data.columns]
+        predictions = self.pipeline.predict(test_data[test_cols])
+        return predictions
