@@ -79,9 +79,8 @@ class ModelPipeline:
         self._print_metrics()
     
     def predict(self, test_data: pd.DataFrame) -> np.ndarray:
-
+            
             test_cols = [col for col in self.train_cols if col in test_data.columns]
             predictions = self.pipeline.predict(test_data[test_cols])
-
             return predictions
 

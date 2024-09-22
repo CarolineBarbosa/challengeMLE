@@ -47,13 +47,13 @@ class PredictionRequest(BaseModel):
 
 @app.post("/predict/")
 async def predict(request: PredictionRequest, api_key: str = Depends(get_api_key)):
-    logging.info("Making predictions...")
-
+    logging.info("Received prediction request: %s", request.json())
     input_data = pd.DataFrame([request.dict()])
     
     prediction = model_pipeline.predict(input_data)
-    
-    return {"predicted_price": prediction[0]}
+    prediction = round(prediction[0], 2)
+    logging.info("Prediction request returned: CLP $ %s", prediction)
+    return {"Predicted Price CLP $ ": prediction}
 
 @app.get("/")
 def read_root():
