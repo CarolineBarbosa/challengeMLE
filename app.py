@@ -26,7 +26,7 @@ model_pipeline = train_model(config_file_name)
 
 ### API KEY AUTH
 config = load_config(config_file_name)
-secret_file_name = config['FILES']['API_KEY']['PATH']
+secret_file_name = config["FILES"]["API_KEY"]["PATH"]
 SECRETS = load_config(secret_file_name)
 API_KEY = SECRETS["API_KEY"]
 API_KEY_NAME = "access-token"
@@ -61,6 +61,7 @@ async def get_api_key(api_key: str = Depends(api_key_header)):
 #     logging.info("Prediction request returned: CLP $ %s", prediction)
 #     return {"Predicted Price CLP $ ": prediction}
 
+
 @app.post("Price Prediction")
 async def predict(
     type: str,
@@ -71,18 +72,22 @@ async def predict(
     n_bathroom: float,
     latitude: float,
     longitude: float,
-    api_key: str = Depends(get_api_key)
+    api_key: str = Depends(get_api_key),
 ):
-    input_data = pd.DataFrame([{
-        "type": type ,
-        "sector": sector ,
-        "net_usable_area": net_usable_area,
-        "net_area": net_area,
-        "n_rooms": n_rooms,
-        "n_bathroom": n_bathroom,
-        "latitude": latitude,
-        "longitude": longitude
-    }])
+    input_data = pd.DataFrame(
+        [
+            {
+                "type": type,
+                "sector": sector,
+                "net_usable_area": net_usable_area,
+                "net_area": net_area,
+                "n_rooms": n_rooms,
+                "n_bathroom": n_bathroom,
+                "latitude": latitude,
+                "longitude": longitude,
+            }
+        ]
+    )
 
     prediction = model_pipeline.predict(input_data)
     prediction = round(prediction[0], 2)
