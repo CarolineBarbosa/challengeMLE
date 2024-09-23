@@ -21,11 +21,13 @@ logging.basicConfig(
 
 ### INITIATING APP
 app = FastAPI()
-
-model_pipeline = train_model("config_files/modelConfig.yaml")
+config_file_name = "config_files/modelConfig.yaml"
+model_pipeline = train_model(config_file_name)
 
 ### API KEY AUTH
-SECRETS = load_config("config_files/secrets.yaml")
+config = load_config(config_file_name)
+secret_file_name = config['FILES']['API_KEY']['PATH']
+SECRETS = load_config(secret_file_name)
 API_KEY = SECRETS["API_KEY"]
 API_KEY_NAME = "access-token"
 api_key_header = APIKeyHeader(name=API_KEY_NAME, auto_error=False)
@@ -38,15 +40,15 @@ async def get_api_key(api_key: str = Depends(api_key_header)):
         raise HTTPException(status_code=403, detail="Could not validate credentials")
 
 
-class PredictionRequest(BaseModel):
-    type: str
-    sector: str
-    net_usable_area: float
-    net_area: float
-    n_rooms: float
-    n_bathroom: float
-    latitude: float
-    longitude: float
+# class PredictionRequest(BaseModel):
+#     type: str
+#     sector: str
+#     net_usable_area: float
+#     net_area: float
+#     n_rooms: float
+#     n_bathroom: float
+#     latitude: float
+#     longitude: float
 
 
 # @app.post("/predict/")
@@ -71,10 +73,9 @@ async def predict(
     longitude: float,
     api_key: str = Depends(get_api_key)
 ):
-    # Create DataFrame from individual parameters
     input_data = pd.DataFrame([{
-        "type": type,
-        "sector": sector,
+        "type": type ,
+        "sector": sector ,
         "net_usable_area": net_usable_area,
         "net_area": net_area,
         "n_rooms": n_rooms,

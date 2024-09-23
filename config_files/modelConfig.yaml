@@ -3,6 +3,8 @@ FILES:
     PATH: "data/train.csv"
   TEST:
     PATH: "data/test.csv"
+  API_KEY:
+    PATH: "config_files/secrets.yaml"
 
 categorical_columns:
   - "type"
