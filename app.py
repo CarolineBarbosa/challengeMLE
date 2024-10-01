@@ -62,7 +62,7 @@ async def get_api_key(api_key: str = Depends(api_key_header)):
 #     return {"Predicted Price CLP $ ": prediction}
 
 
-@app.post("Price Prediction")
+@app.post("/Price Prediction/")
 async def predict(
     type: str,
     sector: str,
